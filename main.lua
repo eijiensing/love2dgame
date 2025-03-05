@@ -33,7 +33,8 @@ end
 function love.update(dt)
 	local dx, dy = Player.Position.x - Cam.x, Player.Position.y - Cam.y
 	Cam:move(dx / 2, dy / 2)
-	MousePosition = Vector(love.mouse.getX(), love.mouse.getY())
+	local MousePositionRaw = Vector(love.mouse.getX(), love.mouse.getY())
+	MousePosition = Vector(Cam:worldCoords(MousePositionRaw.x, MousePositionRaw.y))
 	Player.Aiming = (MousePosition - Player.Position).normalized
 
 	local direction = Vector(0, 0)
@@ -94,7 +95,7 @@ function love.draw()
 
 	love.graphics.setColor(1, 0, 0)
 	love.graphics.circle("fill", Player.Position.x, Player.Position.y, Player.Stats.Size)
-	love.graphics.circle("fill", love.mouse.getX(), love.mouse.getY(), 10)
+	love.graphics.circle("fill", MousePosition.x, MousePosition.y, 10)
 
 	local arrowHeadSize = 20
 	local arrowEnd = Player.Position + Player.Aiming * 100
